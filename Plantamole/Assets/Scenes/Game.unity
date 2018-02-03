@@ -88,7 +88,6 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaDirect: 0.5
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
-    m_ShowResolutionOverlay: 1
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -124,6 +123,7 @@ GameObject:
   - component: {fileID: 473257616}
   - component: {fileID: 473257615}
   - component: {fileID: 473257614}
+  - component: {fileID: 473257618}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -193,3 +193,16 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &473257618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 473257613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09214afd319979d4089861cdd010f4bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Tile: {fileID: 1402009059188872, guid: 0a67c7f555fb1224089d5d42b5524102, type: 2}
+  Player: {fileID: 1943831505169854, guid: 25988d4d16363d049a706c7a4b934a6e, type: 2}
