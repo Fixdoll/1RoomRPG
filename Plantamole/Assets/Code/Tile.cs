@@ -4,12 +4,9 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour {
 
-    public bool edgeBlock = false;
+    public Sprite currentSprite;
     
 	void Start () {
-        
-        if (edgeBlock) {
-            GetComponent<BoxCollider2D>().isTrigger = false;
-        }
+        GetComponent<SpriteRenderer>().sprite = currentSprite;
 	}
 }
