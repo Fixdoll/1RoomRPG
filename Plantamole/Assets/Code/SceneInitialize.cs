@@ -4,17 +4,22 @@ using UnityEngine;
 
 public class SceneInitialize : MonoBehaviour {
 
-    public GameObject Tile;
-    public GameObject Player;
+    public GameObject player;
+    public Transform playerStartPosition;
+    /*public GameObject tile;
+    public float tileWidth = 0.5f;*/
 
-	// Use this for initialization
-	void Start () {
+    void Start () {
 
-        GameObject blockTile = Instantiate(Tile);
+        Instantiate(player, playerStartPosition.position, Quaternion.identity);
+
+        // Bu yontemle her seyi her seferinde bos yere spawn ediyoruz. Eger her oynanista degismesini istedigimiz bir sey olursa bunu prefab'in uzerinden yapabiliriz.
+        // Tile'in sprite'inin random olarak belirlenmesi gibi. Editorde map'i yapmasi cok kolay, buna gerek yok yani.
+
+        /*
+        GameObject blockTile = Instantiate(tile);
         blockTile.GetComponent<BoxCollider2D>().isTrigger = false;
         blockTile.GetComponent<Tile>().currentSprite = null;
-
-        Instantiate(Player, Vector3.zero, Quaternion.identity);
 
         GameObject TileParent = new GameObject("Tile Parent");
         
@@ -23,13 +28,13 @@ public class SceneInitialize : MonoBehaviour {
             for(int j = -6; j < 6; j++)
             {
                 if(i == -6 || i == 5 || j == -6 || j == 5)
-                    Instantiate(blockTile, new Vector3(i + 0.5f, j + 0.5f, 0), Quaternion.identity, TileParent.transform);
+                    Instantiate(blockTile, new Vector3(i*tileWidth + (tileWidth / 2), j * tileWidth + (tileWidth / 2), 0), Quaternion.identity, TileParent.transform);
                 else
-                    Instantiate(Tile, new Vector3(i+0.5f, j+0.5f, 0), Quaternion.identity, TileParent.transform);
+                    Instantiate(tile, new Vector3(i * tileWidth + (tileWidth / 2), j * tileWidth + (tileWidth / 2), 0), Quaternion.identity, TileParent.transform);
             }
         }
 
-        Destroy(blockTile);
-	}
+        Destroy(blockTile);*/
+    }
 	
 }

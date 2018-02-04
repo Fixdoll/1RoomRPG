@@ -16,36 +16,18 @@ public class Player : MonoBehaviour {
 	
 	
 	void Update () {
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            rd.velocity = new Vector2(rd.velocity.x, -Speed);
-        }
-        else if (Input.GetKey(KeyCode.UpArrow))
-        {
-            rd.velocity = new Vector2(rd.velocity.x, Speed);
-        }
-        else
-        {
-            rd.velocity = new Vector2(rd.velocity.x, 0);
-        }
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            rd.velocity = new Vector2(-Speed, rd.velocity.y);
-        }
-        else if (Input.GetKey(KeyCode.RightArrow))
-        {
-            rd.velocity = new Vector2(Speed, rd.velocity.y);
-        }
-        else
-        {
-            rd.velocity = new Vector2(0, rd.velocity.y);
-        }
-        
 
+        Vector2 movement = new Vector2(0f,0f);
+
+        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) {
+            movement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        }
+
+        rd.AddForce(Vector2.ClampMagnitude((movement * Speed * Time.deltaTime), 5f));
+        
         /*float xPress = Input.GetAxis("Horizontal") * Speed / 100;
         float yPress = Input.GetAxis("Vertical") * Speed / 100;
         rd.MovePosition((Vector2)transform.position + new Vector2(xPress, yPress));*/
-
 
     }
 }
