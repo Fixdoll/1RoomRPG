@@ -11,7 +11,7 @@ public class SceneInitialize : MonoBehaviour {
 
     void Start () {
 
-        Instantiate(player, playerStartPosition.position, Quaternion.identity);
+        /*Instantiate(player, playerStartPosition.position, Quaternion.identity);
 
         GameObject blockTile = Instantiate(tile);
         blockTile.GetComponent<BoxCollider2D>().isTrigger = false;
@@ -23,12 +23,8 @@ public class SceneInitialize : MonoBehaviour {
         {
             for(int j = -5; j < 6; j++)
             {
-                if(i == -6 || i == 6 || j == -5 || j == 5)
-                    Instantiate(blockTile, new Vector3(i * tileWidth, j * tileWidth, 0), Quaternion.identity, tileParent.transform);
-                else
-                    Instantiate(tile, new Vector3(i * tileWidth, j * tileWidth, 0), Quaternion.identity, tileParent.transform);
+                Instantiate(tile, new Vector3(i * tileWidth, j * tileWidth, 0), Quaternion.identity, tileParent.transform);
             }
-        }
-        Destroy(blockTile);
+        }*/
     }
 }
