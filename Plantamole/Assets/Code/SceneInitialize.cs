@@ -7,6 +7,7 @@ public class SceneInitialize : MonoBehaviour {
     public GameObject player;
     public Transform playerStartPosition;
     public GameObject tile;
+    public GameObject worm;
     public float tileWidth = 0.5f;
 
     void Start () {
@@ -21,14 +22,18 @@ public class SceneInitialize : MonoBehaviour {
         
         for (int i = -6; i < 7; i++)
         {
-            for(int j = -5; j < 6; j++)
-            {
-                if(i == -6 || i == 6 || j == -5 || j == 5)
+            for (int j = -5; j < 6; j++) {
+                if (i == -6 || i == 6 || j == -5 || j == 5) {
                     Instantiate(blockTile, new Vector3(i * tileWidth, j * tileWidth, 0), Quaternion.identity, tileParent.transform);
-                else
-                    Instantiate(tile, new Vector3(i * tileWidth, j * tileWidth, 0), Quaternion.identity, tileParent.transform);
+                } else {
+                    GameObject newTile = Instantiate(tile, new Vector3(i * tileWidth, j * tileWidth, 0), Quaternion.identity, tileParent.transform);
+                    GameController.tiles.Add(newTile.GetComponent<Tile>());
+                }
             }
         }
         Destroy(blockTile);
+
+        GameObject newWorm = Instantiate(worm, Vector3.zero, Quaternion.identity);
+        newWorm.transform.position = GameController.GetTruePos(newWorm.transform.position);
     }
 }
