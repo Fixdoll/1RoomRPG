@@ -12,7 +12,7 @@ public class SceneInitialize : MonoBehaviour {
 
     void Start () {
 
-        Instantiate(player, playerStartPosition.position, Quaternion.identity);
+        /*Instantiate(player, playerStartPosition.position, Quaternion.identity);
 
         GameObject blockTile = Instantiate(tile);
         blockTile.GetComponent<BoxCollider2D>().isTrigger = false;
@@ -31,7 +31,7 @@ public class SceneInitialize : MonoBehaviour {
                 }
             }
         }
-        Destroy(blockTile);
+        Destroy(blockTile);*/
 
         GameObject newWorm = Instantiate(worm, Vector3.zero, Quaternion.identity);
         newWorm.transform.position = GameController.GetTruePos(newWorm.transform.position);

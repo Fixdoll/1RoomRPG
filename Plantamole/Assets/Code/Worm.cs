@@ -11,17 +11,13 @@ public class Worm : MonoBehaviour {
 
 	void Start () {
         rd = GetComponent<Rigidbody2D>();
-        if (GameController.GetRandomTile() != null) {
+        /*if (GameController.GetRandomTile() != null) {
             targetPos = GameController.GetRandomTile().transform.position;
         } else {
             targetPos = Vector2.zero;
         }
-        StartCoroutine(GoTo(targetPos));
+        StartCoroutine(GoTo(targetPos));*/
         //FindTargetPlant();
-	}
-
-    void Update() {
-        Debug.Log((new Vector2(transform.position.x, transform.position.y) - targetPos).magnitude);
     }
 
     /*void FindTargetPlant() {
@@ -30,7 +26,7 @@ public class Worm : MonoBehaviour {
     }*/
 
     //for now picks a random tile position forever
-    IEnumerator GoTo(Vector2 targetPos) {
+    /*IEnumerator GoTo(Vector2 targetPos) {
         Vector2 dir = (new Vector2(transform.position.x, transform.position.y) - targetPos).normalized;
         Debug.Log(dir);
         rd.velocity = dir;
@@ -42,5 +38,5 @@ public class Worm : MonoBehaviour {
             yield return new WaitForEndOfFrame();
             StartCoroutine(GoTo(targetPos));
         }
-    }
+    }*/
 }

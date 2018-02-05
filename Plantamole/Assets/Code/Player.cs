@@ -15,8 +15,13 @@ public class Player : MonoBehaviour {
     public GameObject nose;
     public GameObject cheek;
 
+    string mode = "Seed"; // Empty, Weapon, Carry, Seed
+
     Rigidbody2D rd;
     int lookDir = 0;
+
+    List<Tile> nearbyTiles = new List<Tile>();
+    Tile highlightedTile;
 
     void Start () {
         rd = GetComponent<Rigidbody2D>();
@@ -52,6 +57,41 @@ public class Player : MonoBehaviour {
             UpdateFace(4);
         } else if (dirAngle < -90 && dirAngle >= -150) {
             UpdateFace(5);
+        }
+
+        switch (mode) {
+            case "Empty":
+                // hands empty
+                break;
+
+            case "Weapon":
+                // holding weapon
+                break;
+
+            case "Carry":
+                // carrying something else
+                break;
+
+            case "Seed":
+                // carrying seed
+                foreach (Tile t in nearbyTiles) {
+                    t.Highlight(false);
+                }
+                highlightedTile = GameController.ClosestTile(transform.position, nearbyTiles);
+                highlightedTile.Highlight(true);
+                break;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision) {
+        if (collision.GetComponent<Tile>() != null) {
+            nearbyTiles.Add(collision.GetComponent<Tile>());
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision) {
+        if (collision.GetComponent<Tile>() != null) {
+            nearbyTiles.Remove(collision.GetComponent<Tile>());
         }
     }
 
