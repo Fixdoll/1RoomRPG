@@ -77,7 +77,7 @@ public class Player : MonoBehaviour {
                 foreach (Tile t in nearbyTiles) {
                     t.Highlight(false);
                 }
-                highlightedTile = GameController.ClosestTile(transform.position, nearbyTiles);
+                highlightedTile = GameController.ClosestTile((Vector2)Camera.main.ScreenToWorldPoint(mousePos), nearbyTiles);
                 highlightedTile.Highlight(true);
                 break;
         }
@@ -90,8 +90,10 @@ public class Player : MonoBehaviour {
     }
 
     private void OnTriggerExit2D(Collider2D collision) {
-        if (collision.GetComponent<Tile>() != null) {
-            nearbyTiles.Remove(collision.GetComponent<Tile>());
+        Tile colT = collision.GetComponent<Tile>();
+        if (colT != null) {
+            nearbyTiles.Remove(colT);
+            colT.Highlight(false);
         }
     }
 
