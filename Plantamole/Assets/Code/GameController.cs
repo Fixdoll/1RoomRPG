@@ -5,30 +5,15 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
-    public List<Tile> xTiles;
-    public static Tile[][] tiles;
+    public Transform tileParent;
+    public static List<Tile> tiles = new List<Tile>();
 
     int mapHeight = 9;
     int mapWidth = 11;
 
     private void Start() {
-        tiles = new Tile[mapHeight][];
-
-        for (int i = 0; i < mapHeight; ++i) {
-            tiles[i] = new Tile[mapWidth];
-        }
-
-        int miss = 0;
-        for (int k = 0; k < mapHeight; k++) {
-            for (int i = 0; i < mapWidth; i++) {
-                int id = k * mapWidth + i;
-                if (id == 0 || id == 10 || id == 88 || id == 98) {
-                    tiles[k][i] = null;
-                    miss--;
-                } else {
-                    tiles[k][i] = xTiles[id+miss];
-                }
-            }
+        for (int b=0; b < 95; b++) {
+            tiles.Add(tileParent.GetChild(b).GetComponent<Tile>());
         }
     }
 
@@ -46,18 +31,48 @@ public class GameController : MonoBehaviour {
         return closestTile;
     }
 
-    /*public static bool HighlightPresent() {
-        foreach (Tile t in tiles) {
-            if (t.Selected) return true;
-        }
-        return false;
-    }*/
+    public static Tile ClosestTileOnMap(Vector2 origin) {
+        return ClosestTile(origin, tiles);
+    }
 
-    /*public static Tile GetRandomTile() {
-        if (tiles.Count > 0) {
-            return tiles[Random.Range(0, GameController.tiles.Count - 1)];
-        } else {
-            return null;
+    public static List<Tile> NeighborTiles(Tile t) {
+        int index = tiles.IndexOf(t);
+        List<Tile> nTiles = new List<Tile>();
+        List<int> numbers = new List<int>();
+        if (index < 9) {
+            numbers = new List<int>(new int[] { -1, 1, 9, 10, 11 });
+            if (index == 8) { numbers.Remove(1); }
+        } else if (index >= 9 && index < 20) {
+            numbers = new List<int>(new int[] { -11, -10, -9, -1, 1, 10, 11, 12});
+            if (index == 9) { numbers.Remove(10); numbers.Remove(-1); }
+            else if (index == 18) { numbers.Remove(-9); }
+            else if (index == 19) { numbers.Remove(-10); numbers.Remove(-9); numbers.Remove(1); numbers.Remove(12); }
+        } else if (index >= 20 && index < 75) {
+            numbers = new List<int>(new int[] { -12, -11, -10, -1, 1, 10, 11, 12 });
+            if (index == 20 || index == 31 || index == 42 || index == 53 || index == 64) { numbers.Remove(-12); numbers.Remove(-1); numbers.Remove(10); }
+            else if (index == 30 || index == 41 || index == 52 || index == 63 || index == 74) { numbers.Remove(-10); numbers.Remove(1); numbers.Remove(12); }
+        } else if (index >= 75 && index < 86) {
+            numbers = new List<int>(new int[] { -12, -11, -10, -1, 1, 9, 10, 11 });
+            if (index == 75) { numbers.Remove(-12); numbers.Remove(-1); numbers.Remove(9); numbers.Remove(10); }
+            else if (index == 76) { numbers.Remove(9); }
+            else if (index == 85) { numbers.Remove(-10); numbers.Remove(1); }
+        } else if (index >= 86) {
+            numbers = new List<int>(new int[] { -11, -10, -9, -1, 1 });
+            if (index == 86) {
+                numbers.Remove(-1);
+            }
         }
-    }*/
+        
+        for (int l = 0; l < numbers.Count; l++) {
+            if (index + numbers[l] >= 0 && index + numbers[l] < tiles.Count) {
+                nTiles.Add(tiles[index + numbers[l]]);
+            }
+        }
+
+        return nTiles;
+    }
+
+    public static Tile GetRandomTile() {
+        return tiles[Random.Range(0, tiles.Count - 1)];
+    }
 }
