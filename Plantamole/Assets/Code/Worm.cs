@@ -8,7 +8,11 @@ public class Worm : Creature {
     string mode = "idle";
     Vector2 targetPos;
 
-    void LateUpdate() {
-        FindPath();
+    void Update() {
+        transform.position = GameController.GetTruePos(transform.position);
+        List<Tile> path = FindPath(GameController.tiles[20]);
+        for (int i = 0; i < path.Count-1; i++) {
+            Debug.DrawLine(path[i].transform.position, path[i + 1].transform.position);
+        }
     }
 }
