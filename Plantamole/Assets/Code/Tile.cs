@@ -1,30 +1,39 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Tile : MonoBehaviour {
 
     public Sprite unavailableSprite;
     public GameObject myHighlight;
-    public Object content;
+    public GameObject content;
+
+    void Start() {
+        if (!IsAvailable()) {
+            GetComponent<SpriteRenderer>().sprite = unavailableSprite;
+        }
+    }
 
     public void Highlight(bool state) {
         myHighlight.SetActive(state);
     }
 
     public bool IsAvailable() {
-        if (content is Obstacle) {
-            return false;
+        if (content != null) {
+            if (content.GetComponent<Obstacle>()) {
+                return false;
+            } else {
+                return true;
+            }
         } else {
             return true;
         }
     }
 
-    public void SetContent(Object con) {
+    public void SetContent(GameObject con) {
         content = con;
         if (!IsAvailable()) {
-            GetComponent<Image>().sprite = unavailableSprite;
+            GetComponent<SpriteRenderer>().sprite = unavailableSprite;
         }
     }
 }
