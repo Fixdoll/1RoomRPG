@@ -108,7 +108,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2658548440f3f904eb295c97e88b4959, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unavailableSprite: {fileID: 21300000, guid: d01e6a44b80b44e419c2463950aabf32, type: 3}
   myHighlight: {fileID: 1762265667455308}
+  content: {fileID: 0}
 --- !u!212 &212241235874672228
 SpriteRenderer:
   m_ObjectHideFlags: 1
