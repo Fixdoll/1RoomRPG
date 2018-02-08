@@ -15,7 +15,6 @@ public class Plant : MonoBehaviour {
 
     public bool lighted = false;
     public bool watered = false;
-
     
     int currentPhase = 0;
     float health;
@@ -32,7 +31,7 @@ public class Plant : MonoBehaviour {
         growth += growthSpeed;
         if (lighted) growth += lightBoost;
         if (watered) growth += waterBoost;
-        if (growth/100 == 1) {
+        if (growth >= 100) {
             PhaseUp();
             growth = 0;
         }
