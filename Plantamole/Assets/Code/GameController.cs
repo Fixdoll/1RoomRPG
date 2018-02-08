@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
+    
     public Transform tileParent;
     public static List<Tile> tiles = new List<Tile>();
 
