@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Type {Unidentified = -1, Carrot, Potato, Onion }
+public enum PlantType {Unidentified = -1, Carrot, Potato, Onion, Beetroot, Ginger }
 
 public class Plant : MonoBehaviour {
 
-    public Type plantType = Type.Unidentified;
+    public PlantType type = PlantType.Unidentified;
     public Sprite[] spriteCycle;
     public float growthSpeed;
     public float lightBoost;

@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4625656786350856}
   - component: {fileID: 60898270694766830}
-  - component: {fileID: 114691547878671260}
+  - component: {fileID: 114836790623194916}
   m_Layer: 0
   m_Name: Rock
   m_TagString: Untagged
@@ -95,9 +95,9 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.44713843, y: 0.113413334}
-      - {x: -0.02247119, y: 0.18899357}
-      - {x: -0.41959524, y: 0.11045694}
+    - - {x: 0.33657885, y: 0.27500045}
+      - {x: -0.02247119, y: 0.30805767}
+      - {x: -0.37707233, y: 0.24653018}
       - {x: -0.5024049, y: -0.08729303}
       - {x: -0.5358467, y: -0.2409091}
       - {x: -0.34098482, y: -0.41540885}
@@ -105,7 +105,7 @@ PolygonCollider2D:
       - {x: 0.37726617, y: -0.39726174}
       - {x: 0.52988243, y: -0.2364198}
       - {x: 0.5586021, y: -0.070569634}
---- !u!114 &114691547878671260
+--- !u!114 &114836790623194916
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -113,7 +113,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1127426570246712}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6129fb62fa123ab4a8a969be6c3961d0, type: 3}
+  m_Script: {fileID: 11500000, guid: cd1106b212537b9448ec0583eb6bf9ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!212 &212241566652267828

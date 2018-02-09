@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum CreatureType { Unidentified = -1, Worm, Spider }
+
 public class Creature : MonoBehaviour {
+
+    public Tile start;
 
     public List<Tile> FindPath(Tile target) {
         List<Tile> path = new List<Tile>();

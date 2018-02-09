@@ -12,9 +12,13 @@ public class SceneInitialize : MonoBehaviour {
 
     void Start () {
 
-        
+        GameObject p = Instantiate(player, playerStartPosition.position, Quaternion.identity, transform.parent);
+        p.transform.position = GameController.GetTruePos(p.transform.position);
 
-        GameObject newWorm = Instantiate(worm, Vector3.zero, Quaternion.identity);
-        newWorm.transform.position = GameController.GetTruePos(newWorm.transform.position);
+        GameController.Plant(PlantType.Carrot, GameController.tiles[13]);
+        GameController.Plant(PlantType.Carrot, GameController.tiles[14]);
+        GameController.Plant(PlantType.Carrot, GameController.tiles[15]);
+
+        GameController.SpawnCreature(CreatureType.Worm, 0);
     }
 }
