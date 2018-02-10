@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4114312177320616}
   - component: {fileID: 212633296736244686}
   - component: {fileID: 95004796420221554}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Graphics
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37,7 +37,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4977227485244144}
   - component: {fileID: 60779609561566310}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Hitbox2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53,7 +53,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4628240925892246}
   - component: {fileID: 60812862968643316}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Hitbox1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70,7 +70,7 @@ GameObject:
   - component: {fileID: 4842771865758626}
   - component: {fileID: 114794103214014650}
   - component: {fileID: 50887291055863000}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Worm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,7 +86,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4520161806082868}
   - component: {fileID: 60617016477343162}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Hitbox3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -319,6 +319,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd9121cf9081af84d9d3eaf58f6828f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  start: {fileID: 0}
 --- !u!212 &212633296736244686
 SpriteRenderer:
   m_ObjectHideFlags: 1

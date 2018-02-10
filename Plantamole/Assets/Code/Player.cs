@@ -15,17 +15,25 @@ public class Player : MonoBehaviour {
     public GameObject nose;
     public GameObject cheek;
 
+    List<Item> inventory = new List<Item>();
+    Item currentItem;
     string mode = "Seed"; // Empty, Weapon, Carry, Seed
 
     Rigidbody2D rd;
     int lookDir = 0;
 
     List<Tile> nearbyTiles = new List<Tile>();
+    List<Tile> nearbyEmptyTiles = new List<Tile>();
     Tile highlightedTile;
 
     void Start () {
         rd = GetComponent<Rigidbody2D>();
         transform.position = GameController.GetTruePos(transform.position);
+
+        //temp item add
+        inventory.Add(new Seed(SeedType.Carrot));
+
+        currentItem = inventory[0];
     }
 	
 	void Update () {
@@ -59,33 +67,28 @@ public class Player : MonoBehaviour {
             UpdateFace(5);
         }
 
-        switch (mode) {
-            case "Empty":
-                // hands empty
-                break;
+        if (currentItem == null) {
+            // carrying nothing
 
-            case "Weapon":
-                // holding weapon
-                break;
+        } else if (currentItem is Seed) {
+            // carrying seed
+            foreach (Tile t in nearbyEmptyTiles) {
+                t.Highlight(false);
+            }
+            highlightedTile = GameController.ClosestTile((Vector2)Camera.main.ScreenToWorldPoint(mousePos), nearbyEmptyTiles);
+            highlightedTile.Highlight(true);
+        } else {
 
-            case "Carry":
-                // carrying something else
-                break;
-
-            case "Seed":
-                // carrying seed
-                foreach (Tile t in nearbyTiles) {
-                    t.Highlight(false);
-                }
-                highlightedTile = GameController.ClosestTile((Vector2)Camera.main.ScreenToWorldPoint(mousePos), nearbyTiles);
-                highlightedTile.Highlight(true);
-                break;
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
-        if (collision.GetComponent<Tile>() != null) {
-            nearbyTiles.Add(collision.GetComponent<Tile>());
+        if (collision.GetComponent<Tile>()) {
+            Tile colT = collision.GetComponent<Tile>();
+            nearbyTiles.Add(colT);
+            if (colT.content == null) {
+                nearbyEmptyTiles.Add(colT);
+            }
         }
     }
 
@@ -93,6 +96,7 @@ public class Player : MonoBehaviour {
         Tile colT = collision.GetComponent<Tile>();
         if (colT != null) {
             nearbyTiles.Remove(colT);
+            nearbyEmptyTiles.Remove(colT);
             colT.Highlight(false);
         }
     }

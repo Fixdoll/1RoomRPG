@@ -7,9 +7,10 @@ public class Tile : MonoBehaviour {
     public Sprite unavailableSprite;
     public GameObject myHighlight;
     public GameObject content;
+    public bool isHighlightable = true;
 
     void Start() {
-        if (!IsAvailable()) {
+        if (!IsAvailable() || !isHighlightable) {
             GetComponent<SpriteRenderer>().sprite = unavailableSprite;
         }
     }

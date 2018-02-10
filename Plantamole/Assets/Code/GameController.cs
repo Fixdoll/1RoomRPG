@@ -46,13 +46,17 @@ public class GameController : MonoBehaviour {
     }
 
     public static Tile ClosestTile(Vector2 origin, List<Tile> tilesToCheck) {
-        Tile closestTile = tilesToCheck[0];
-        for (int i=1; i < tilesToCheck.Count; i++) {
-            if (((Vector2)tilesToCheck[i].transform.position - origin).magnitude < ((Vector2)closestTile.transform.position - origin).magnitude) {
-                closestTile = tilesToCheck[i];
+        if (tilesToCheck.Count > 0) {
+            Tile closestTile = tilesToCheck[0];
+            for (int i = 1; i < tilesToCheck.Count; i++) {
+                if (((Vector2)tilesToCheck[i].transform.position - origin).magnitude < ((Vector2)closestTile.transform.position - origin).magnitude) {
+                    closestTile = tilesToCheck[i];
+                }
             }
+            return closestTile;
+        } else {
+            return null;
         }
-        return closestTile;
     }
 
     public static Tile ClosestTileOnMap(Vector2 origin) {

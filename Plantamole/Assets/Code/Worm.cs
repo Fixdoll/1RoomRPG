@@ -10,7 +10,6 @@ public class Worm : Creature {
     WormMode mode = WormMode.Idle;
     Vector2 targetPos;
 
-
     void Start() {
         rd = GetComponent<Rigidbody2D>();
         StartCoroutine(GoToStart(start));
