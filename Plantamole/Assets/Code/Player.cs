@@ -15,9 +15,18 @@ public class Player : MonoBehaviour {
     public GameObject nose;
     public GameObject cheek;
 
-    List<Item> inventory = new List<Item>();
+    Item[] inventory = new Item[6];
     Item currentItem;
-    string mode = "Seed"; // Empty, Weapon, Carry, Seed
+    int _currentID = 0;
+    public int CurrentID
+    {
+        get {
+            return _currentID;
+        } set {
+            _currentID = value;
+            currentItem = inventory[_currentID];
+        }
+    }
 
     Rigidbody2D rd;
     int lookDir = 0;
@@ -29,11 +38,7 @@ public class Player : MonoBehaviour {
     void Start () {
         rd = GetComponent<Rigidbody2D>();
         transform.position = GameController.GetTruePos(transform.position);
-
-        //temp item add
-        inventory.Add(new Seed(SeedType.Carrot));
-
-        currentItem = inventory[0];
+        CurrentID = 0;
     }
 	
 	void Update () {
@@ -47,6 +52,11 @@ public class Player : MonoBehaviour {
             feet.GetComponent<Animator>().SetBool("walking", true);
         } else {
             feet.GetComponent<Animator>().SetBool("walking", false);
+        }
+
+        // TEMP PICKUP CARROT SEED WITH SPACE
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            Pickup(new Seed(SeedType.Carrot));
         }
 
         Vector2 mousePos = Input.mousePosition;
@@ -141,6 +151,20 @@ public class Player : MonoBehaviour {
         } else {
             transform.localScale = new Vector3(1f, 1f, 1f);
         }
+    }
+
+    void Pickup(Item item) {
+
+        for (int i = 0; i < inventory.Length; i++) {
+            if (inventory[i] == null) {
+                inventory[i] = item;
+                CurrentID = CurrentID;
+                Debug.Log("Player picked up a " + item + "!");
+                // DO OTHER STUFF RELATED TO PICKING UP AN ITEM
+                return;
+            }
+        }
+        // DO STUFF RELATED TO TRYING TO PICKUP WITH FULL INVENTORY
     }
     
 }

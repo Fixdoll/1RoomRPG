@@ -29,7 +29,7 @@ public class Worm : Creature {
         if (((Vector2)transform.position - (Vector2)st.transform.position).magnitude > 0.2f) {
             StartCoroutine(GoToStart(start));
         } else {
-            Debug.Log("REACHED START POSITION");
+            Debug.Log("I'm a worm and I reached my starting position.");
             rd.velocity = new Vector2(0,0);
         }
     }
