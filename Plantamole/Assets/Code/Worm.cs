@@ -9,10 +9,13 @@ public class Worm : Creature {
     Rigidbody2D rd;
     WormMode mode = WormMode.Idle;
     Vector2 targetPos;
+    bool movingToTarget;
 
     void Start() {
         rd = GetComponent<Rigidbody2D>();
-        StartCoroutine(GoToStart(start));
+        targetPos = start.transform.position;
+        StartCoroutine(GoToTarget(targetPos));
+        movingToTarget = true;
     }
 
     void Update() {
@@ -21,16 +24,24 @@ public class Worm : Creature {
         for (int i = 0; i < path.Count-1; i++) {
             Debug.DrawLine(path[i].transform.position, path[i + 1].transform.position);
         }
+
+        if (movingToTarget) {
+            if (GameController.ManhattanDistance((Vector2)transform.position, targetPos) < 0.2f) {
+                Debug.Log("Worm reached target.");
+                rd.velocity = new Vector2(0, 0);
+                StopAllCoroutines();
+                // GIVE ANOTHER TARGET
+                // START GOTOTARGET AGAIN
+                movingToTarget = false;
+            }
+        }
     }
 
-    IEnumerator GoToStart(Tile st) {
-        rd.AddForce(((Vector2)st.transform.position - (Vector2)transform.position).normalized * 0.1f, ForceMode2D.Impulse);
-        yield return new WaitForSeconds(1f);
-        if (((Vector2)transform.position - (Vector2)st.transform.position).magnitude > 0.2f) {
-            StartCoroutine(GoToStart(start));
-        } else {
-            Debug.Log("I'm a worm and I reached my starting position.");
-            rd.velocity = new Vector2(0,0);
-        }
+    IEnumerator GoToTarget(Vector2 targetPosition) {
+        rd.AddForce((targetPosition - (Vector2)transform.position).normalized * 0.5f, ForceMode2D.Impulse);
+        yield return new WaitForSeconds(0.8f);
+        rd.velocity = new Vector2(0, 0);
+        yield return new WaitForSeconds(0.25f);
+        StartCoroutine(GoToTarget(targetPosition));
     }
 }
