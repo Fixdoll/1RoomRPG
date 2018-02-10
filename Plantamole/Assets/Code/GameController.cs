@@ -139,4 +139,9 @@ public class GameController : MonoBehaviour {
         spawnedCreatures.Add(sc);
         sc.start = tiles[startTileIndex];
     }
+
+    // USE THIS TO GET VECTOR2 DISTANCES
+    public static float ManhattanDistance(Vector2 pos1, Vector2 pos2) {
+        return Mathf.Abs(pos1.x - pos2.x) + Mathf.Abs(pos1.y - pos2.y);
+    }
 }
