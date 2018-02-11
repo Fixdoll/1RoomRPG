@@ -225,9 +225,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4837516630693908}
-  - component: {fileID: 114206787882825452}
   - component: {fileID: 50733962163748120}
   - component: {fileID: 70594450365563136}
+  - component: {fileID: 114206787882825452}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -311,7 +311,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1970110847974106}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.3}
+  m_LocalPosition: {x: 0, y: 0, z: -0.09900004}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4987937462853088}
@@ -411,7 +411,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1857366816730284}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.053}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4496468283295514}
@@ -427,7 +427,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1176602447715532}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.4}
+  m_LocalPosition: {x: 0, y: 0, z: -0.199}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4108253988325658}
@@ -595,6 +595,8 @@ MonoBehaviour:
   rightEye: {fileID: 1828482104333728}
   nose: {fileID: 1709775032609040}
   cheek: {fileID: 1393726079099630}
+  inventoryIcons: []
+  carrotSeedIcon: {fileID: 21300000, guid: 79a01b7ea276ecc4491463f284c17e1b, type: 3}
 --- !u!212 &212256967664148966
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum SeedType { Carrot, Potato, Onion, Beetroot, Ginger }
-
 public class Seed : Item {
 
-    private SeedType t;
+    public PlantType t;
 
-    public Seed(SeedType type) {
+    public Seed(PlantType type, Sprite icon) {
         t = type;
+        inventoryIcon = icon;
     }
 }

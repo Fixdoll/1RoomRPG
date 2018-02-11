@@ -35,7 +35,7 @@ public class Creature : MonoBehaviour {
         // get distances
         List<float> trialDistances = new List<float>();
         foreach (Tile t in tilesToTry) {
-            trialDistances.Add((targetPos - (Vector2)t.transform.position).magnitude);
+            trialDistances.Add(GameController.ManhattanDistance(targetPos, t.transform.position));
         }
         int shortestDistID = 0;
         for (int i = 1; i < trialDistances.Count; i++) {

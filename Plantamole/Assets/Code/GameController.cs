@@ -21,6 +21,10 @@ public class GameController : MonoBehaviour {
     public GameObject worm;
     public GameObject spider;
 
+    public static List<GameObject> groundObjects = new List<GameObject>();
+    public GameObject carrotSeed;
+    public GameObject stone;
+
     public static Transform game;
 
     public Transform entrancesParent;
@@ -28,6 +32,9 @@ public class GameController : MonoBehaviour {
 
     int mapHeight = 9;
     int mapWidth = 11;
+
+    public Image[] inventoryIcons;
+    public static Image[] invIcons = new Image[6];
 
     private void Start() {
         game = this.transform;
@@ -39,6 +46,10 @@ public class GameController : MonoBehaviour {
         }
         plants = new GameObject[] { carrot, potato, onion, beetroot, ginger };
         creatures = new GameObject[] { worm, spider };
+
+        for (int k=0; k < inventoryIcons.Length; k++) {
+            invIcons[k] = inventoryIcons[k];
+        }
     }
 
     public static Vector3 GetTruePos (Vector3 pos) {
@@ -49,7 +60,7 @@ public class GameController : MonoBehaviour {
         if (tilesToCheck.Count > 0) {
             Tile closestTile = tilesToCheck[0];
             for (int i = 1; i < tilesToCheck.Count; i++) {
-                if (((Vector2)tilesToCheck[i].transform.position - origin).magnitude < ((Vector2)closestTile.transform.position - origin).magnitude) {
+                if (ManhattanDistance(origin, tilesToCheck[i].transform.position) < ManhattanDistance(origin, closestTile.transform.position)) {
                     closestTile = tilesToCheck[i];
                 }
             }
@@ -138,6 +149,47 @@ public class GameController : MonoBehaviour {
         Creature sc = spawnedCreature.GetComponent<Creature>();
         spawnedCreatures.Add(sc);
         sc.start = tiles[startTileIndex];
+    }
+
+    public static void AddGroundObject(GameObject go) {
+        groundObjects.Add(go);
+    }
+
+    public static void RemoveGroundObject(GameObject go) {
+        if (groundObjects.Contains(go)) {
+            groundObjects.Remove(go);
+        }
+    }
+
+    public static GameObject ClosestGroundObjectInRange(Vector2 origin, Vector2 assist, float range) {
+        List<GameObject> groundObjectsInRange = new List<GameObject>();
+        foreach (GameObject o in groundObjects) {
+            if (ManhattanDistance(origin, o.transform.position) < range) {
+                groundObjectsInRange.Add(o);
+            }
+        }
+        if (groundObjectsInRange.Count > 0) {
+            GameObject closest = groundObjectsInRange[0];
+            for (int i = 1; i < groundObjectsInRange.Count; i++) {
+                if (ManhattanDistance(assist, groundObjectsInRange[i].transform.position) < ManhattanDistance(assist, closest.transform.position)) {
+                    closest = groundObjectsInRange[i];
+                }
+            }
+            return closest;
+        } else {
+            return null;
+        }
+    }
+
+    public static void UpdateInventoryUI(Item[] inv) {
+        for (int i = 0; i < invIcons.Length; i++) {
+            if (inv[i] != null) {
+                invIcons[i].sprite = inv[i].inventoryIcon;
+                invIcons[i].CrossFadeAlpha(1f, 0f, true);
+            } else {
+                invIcons[i].CrossFadeAlpha(0f, 0f, true);
+            }
+        }
     }
 
     // USE THIS TO GET VECTOR2 DISTANCES

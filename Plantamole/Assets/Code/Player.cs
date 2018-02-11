@@ -27,6 +27,10 @@ public class Player : MonoBehaviour {
             currentItem = inventory[_currentID];
         }
     }
+    public Image[] inventoryIcons;
+
+    // TEMP PUBLIC ICON
+    public Sprite carrotSeedIcon;
 
     Rigidbody2D rd;
     int lookDir = 0;
@@ -39,10 +43,17 @@ public class Player : MonoBehaviour {
         rd = GetComponent<Rigidbody2D>();
         transform.position = GameController.GetTruePos(transform.position);
         CurrentID = 0;
+
+        foreach (Tile t in GameController.tiles) {
+            Physics2D.IgnoreCollision(t.GetComponent<Collider2D>(), GetComponent<Collider2D>());
+        }
+
+        GameController.UpdateInventoryUI(inventory);
     }
 	
 	void Update () {
 
+        // MOVEMENT
         Vector2 movement = new Vector2(0f,0f);
 
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) {
@@ -56,9 +67,10 @@ public class Player : MonoBehaviour {
 
         // TEMP PICKUP CARROT SEED WITH SPACE
         if (Input.GetKeyDown(KeyCode.Space)) {
-            Pickup(new Seed(SeedType.Carrot));
+            Pickup(new Seed(PlantType.Carrot, carrotSeedIcon));
         }
 
+        // FACING
         Vector2 mousePos = Input.mousePosition;
         Vector2 playerPos = Camera.main.WorldToScreenPoint(transform.position);
         int dirAngle = Mathf.FloorToInt(Vector2.SignedAngle(playerPos - mousePos, playerPos - (playerPos + Vector2.up)));
@@ -77,19 +89,50 @@ public class Player : MonoBehaviour {
             UpdateFace(5);
         }
 
+        foreach (Tile t in nearbyTiles) {
+            t.Highlight(false);
+        }
+
+        // HIGHLIGHTING CLOSEST GROUND OBJECT
+        foreach (GameObject go in GameController.groundObjects) {
+            if (go.GetComponent<HighlightableObject>()) {
+                go.GetComponent<HighlightableObject>().Highlight(false);
+            }
+        }
+
+        GameObject highlightedObject = GameController.ClosestGroundObjectInRange(transform.position, (Vector2)Camera.main.ScreenToWorldPoint(mousePos), 1.2f);
+        if (highlightedObject != null) {
+            if (highlightedObject.GetComponent<HighlightableObject>()) {
+                highlightedObject.GetComponent<HighlightableObject>().Highlight(true);
+            }
+        }
+
+        // MODES
         if (currentItem == null) {
             // carrying nothing
 
         } else if (currentItem is Seed) {
             // carrying seed
-            foreach (Tile t in nearbyEmptyTiles) {
-                t.Highlight(false);
-            }
             highlightedTile = GameController.ClosestTile((Vector2)Camera.main.ScreenToWorldPoint(mousePos), nearbyEmptyTiles);
-            highlightedTile.Highlight(true);
+            if (highlightedTile != null) {
+                highlightedTile.Highlight(true);
+                // plant on left mouse click
+                if (Input.GetButtonDown("Fire1")) {
+                    GameController.Plant((currentItem as Seed).t, highlightedTile);
+                    RemoveCurrentItem();
+                    nearbyEmptyTiles.Remove(highlightedTile);
+                    highlightedTile.Highlight(false);
+                }
+            }
         } else {
 
         }
+    }
+
+    public void RemoveCurrentItem() {
+        inventory[CurrentID] = null;
+        CurrentID = CurrentID;
+        GameController.UpdateInventoryUI(inventory);
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
@@ -160,11 +203,11 @@ public class Player : MonoBehaviour {
                 inventory[i] = item;
                 CurrentID = CurrentID;
                 Debug.Log("Player picked up a " + item + "!");
+                GameController.UpdateInventoryUI(inventory);
                 // DO OTHER STUFF RELATED TO PICKING UP AN ITEM
                 return;
             }
         }
         // DO STUFF RELATED TO TRYING TO PICKUP WITH FULL INVENTORY
     }
-    
 }

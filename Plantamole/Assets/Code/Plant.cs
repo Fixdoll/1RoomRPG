@@ -31,28 +31,29 @@ public class Plant : MonoBehaviour {
         growth += growthSpeed;
         if (lighted) growth += lightBoost;
         if (watered) growth += waterBoost;
-        if (growth >= 100) {
+        if (growth >= 100 && currentPhase != spriteCycle.Length-1) {
             PhaseUp();
             growth = 0;
         }
     }
 
     void PhaseUp() {
-        if (currentPhase == spriteCycle.Length - 1) return;
         currentPhase++;
         health += startHealth * 0.2f;
         maxHealth += startHealth * 0.2f;
         // spawn particles
         // play sound
         GetComponent<SpriteRenderer>().sprite = spriteCycle[currentPhase]; // swap sprite
-        // max phase check & stop growing
+        if (currentPhase == spriteCycle.Length - 1) {
+            GameController.AddGroundObject(gameObject);
+        }
     }
 
     public void GetDamage(float damage) {
-        health += damage;
+        health = Mathf.Clamp(health - damage, 0f, maxHealth);
         // damage flash
         // play sound
-        if (health < 0) Kill(); // death check
+        if (health == 0) Kill(); // death check
     }
 
     public void Kill() {
