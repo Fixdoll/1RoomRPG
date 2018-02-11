@@ -67,9 +67,9 @@ public class Plant : MonoBehaviour {
     }
 
     public void Harvest() {
-        // give product
+        GameController.SpawnHarvestSeed(this);
         // spawn particles
         // play sound
-        // destroy
+        Destroy(gameObject);
     }
 }

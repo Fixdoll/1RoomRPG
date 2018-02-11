@@ -22,6 +22,7 @@ public class GameController : MonoBehaviour {
     public GameObject spider;
 
     public static List<GameObject> groundObjects = new List<GameObject>();
+    public static GameObject[] objects;
     public GameObject carrotSeed;
     public GameObject stone;
 
@@ -53,6 +54,7 @@ public class GameController : MonoBehaviour {
         }
         plants = new GameObject[] { carrot, potato, onion, beetroot, ginger };
         creatures = new GameObject[] { worm, spider };
+        objects = new GameObject[] { carrotSeed, stone };
 
         for (int k=0; k < inventoryIcons.Length; k++) {
             invIcons[k] = inventoryIcons[k];
@@ -177,8 +179,10 @@ public class GameController : MonoBehaviour {
     public static GameObject ClosestGroundObjectInRange(Vector2 origin, Vector2 assist, float range) {
         List<GameObject> groundObjectsInRange = new List<GameObject>();
         foreach (GameObject o in groundObjects) {
-            if (ManhattanDistance(origin, o.transform.position) < range) {
-                groundObjectsInRange.Add(o);
+            if (o != null) {
+                if (ManhattanDistance(origin, o.transform.position) < range) {
+                    groundObjectsInRange.Add(o);
+                }
             }
         }
         if (groundObjectsInRange.Count > 0) {
@@ -207,8 +211,19 @@ public class GameController : MonoBehaviour {
         invFrames[currentID].sprite = activeFrame;
     }
 
+    public static void SpawnHarvestSeed(Plant harvestedPlant) {
+        GameObject seed = objects[0];
+        switch (harvestedPlant.type) {
+            case PlantType.Carrot:
+                seed = objects[0];
+                break;
+        }
+        AddGroundObject(Instantiate(seed, harvestedPlant.transform.position, Quaternion.identity, game));
+    }
+
     // USE THIS TO GET VECTOR2 DISTANCES
     public static float ManhattanDistance(Vector2 pos1, Vector2 pos2) {
         return Mathf.Abs(pos1.x - pos2.x) + Mathf.Abs(pos1.y - pos2.y);
     }
+
 }

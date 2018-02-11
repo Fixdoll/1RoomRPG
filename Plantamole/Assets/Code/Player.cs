@@ -112,8 +112,10 @@ public class Player : MonoBehaviour {
 
         // HIGHLIGHTING CLOSEST GROUND OBJECT
         foreach (GameObject go in GameController.groundObjects) {
-            if (go.GetComponent<HighlightableObject>()) {
-                go.GetComponent<HighlightableObject>().Highlight(false);
+            if (go != null) {
+                if (go.GetComponent<HighlightableObject>()) {
+                    go.GetComponent<HighlightableObject>().Highlight(false);
+                }
             }
         }
 
@@ -121,6 +123,18 @@ public class Player : MonoBehaviour {
         if (highlightedObject != null) {
             if (highlightedObject.GetComponent<HighlightableObject>()) {
                 highlightedObject.GetComponent<HighlightableObject>().Highlight(true);
+            }
+        }
+
+        // INTERACT WITH E
+        if (Input.GetButtonDown("Interact")) {
+            if (highlightedObject != null) {
+                if (highlightedObject.GetComponent<Plant>()) {
+                    highlightedObject.GetComponent<Plant>().Harvest();
+                } else if (highlightedObject.GetComponent<SeedObject>()) {
+                    Pickup(new Seed(highlightedObject.GetComponent<SeedObject>().t, highlightedObject.GetComponent<SeedObject>().inventoryIcon));
+                    Destroy(highlightedObject.gameObject);
+                }
             }
         }
 
@@ -215,10 +229,14 @@ public class Player : MonoBehaviour {
     void Pickup(Item item) {
 
         for (int i = 0; i < inventory.Length; i++) {
-            if (inventory[i] == null) {
+            if (inventory[CurrentID] == null) {
+                inventory[CurrentID] = item;
+                CurrentID = CurrentID;
+                // DO OTHER STUFF RELATED TO PICKING UP AN ITEM
+                return;
+            } else if (inventory[i] == null) {
                 inventory[i] = item;
                 CurrentID = CurrentID;
-                Debug.Log("Player picked up a " + item + "!");
                 // DO OTHER STUFF RELATED TO PICKING UP AN ITEM
                 return;
             }

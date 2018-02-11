@@ -11142,7 +11142,7 @@ MonoBehaviour:
   ginger: {fileID: 0}
   worm: {fileID: 1707763045501546, guid: 944cfdb88de106742b57df07bf21c65f, type: 2}
   spider: {fileID: 0}
-  carrotSeed: {fileID: 0}
+  carrotSeed: {fileID: 1094834590193596, guid: cc4eccb49b2bd404d815b09b435d1999, type: 2}
   stone: {fileID: 0}
   entrancesParent: {fileID: 984359824}
   inventoryIcons:
