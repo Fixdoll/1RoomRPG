@@ -36,6 +36,13 @@ public class GameController : MonoBehaviour {
     public Image[] inventoryIcons;
     public static Image[] invIcons = new Image[6];
 
+    public Image[] inventoryFrames;
+    public static Image[] invFrames = new Image[6];
+    public Sprite activeInventoryFrame;
+    public static Sprite activeFrame;
+    public Sprite inactiveInventoryFrame;
+    public static Sprite inactiveFrame;
+
     private void Start() {
         game = this.transform;
         for (int b=0; b < 95; b++) {
@@ -50,6 +57,12 @@ public class GameController : MonoBehaviour {
         for (int k=0; k < inventoryIcons.Length; k++) {
             invIcons[k] = inventoryIcons[k];
         }
+
+        for (int g=0; g < inventoryFrames.Length; g++) {
+            invFrames[g] = inventoryFrames[g];
+        }
+        activeFrame = activeInventoryFrame;
+        inactiveFrame = inactiveInventoryFrame;
     }
 
     public static Vector3 GetTruePos (Vector3 pos) {
@@ -181,7 +194,7 @@ public class GameController : MonoBehaviour {
         }
     }
 
-    public static void UpdateInventoryUI(Item[] inv) {
+    public static void UpdateInventoryUI(Item[] inv, int currentID) {
         for (int i = 0; i < invIcons.Length; i++) {
             if (inv[i] != null) {
                 invIcons[i].sprite = inv[i].inventoryIcon;
@@ -189,7 +202,9 @@ public class GameController : MonoBehaviour {
             } else {
                 invIcons[i].CrossFadeAlpha(0f, 0f, true);
             }
+            invFrames[i].sprite = inactiveFrame;
         }
+        invFrames[currentID].sprite = activeFrame;
     }
 
     // USE THIS TO GET VECTOR2 DISTANCES

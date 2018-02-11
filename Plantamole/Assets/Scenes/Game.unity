@@ -11152,6 +11152,17 @@ MonoBehaviour:
   - {fileID: 475049453}
   - {fileID: 632172338}
   - {fileID: 222593214}
+  inventoryFrames:
+  - {fileID: 509898973}
+  - {fileID: 1435904745}
+  - {fileID: 463881849}
+  - {fileID: 320233172}
+  - {fileID: 537262492}
+  - {fileID: 1242162405}
+  activeInventoryFrame: {fileID: 21300000, guid: 8d74fe92165bbd346a43a226dd855f9d,
+    type: 3}
+  inactiveInventoryFrame: {fileID: 21300000, guid: 805908bcd9050794d9f030d37a9fe511,
+    type: 3}
 --- !u!4 &1568896795 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4188445735922482, guid: 0a67c7f555fb1224089d5d42b5524102,

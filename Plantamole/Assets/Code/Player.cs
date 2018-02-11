@@ -25,6 +25,7 @@ public class Player : MonoBehaviour {
         } set {
             _currentID = value;
             currentItem = inventory[_currentID];
+            GameController.UpdateInventoryUI(inventory, CurrentID);
         }
     }
     public Image[] inventoryIcons;
@@ -47,8 +48,6 @@ public class Player : MonoBehaviour {
         foreach (Tile t in GameController.tiles) {
             Physics2D.IgnoreCollision(t.GetComponent<Collider2D>(), GetComponent<Collider2D>());
         }
-
-        GameController.UpdateInventoryUI(inventory);
     }
 	
 	void Update () {
@@ -89,7 +88,25 @@ public class Player : MonoBehaviour {
             UpdateFace(5);
         }
 
-        foreach (Tile t in nearbyTiles) {
+        // SCROLL INVENTORY
+        float scroll = Input.GetAxisRaw("Mouse ScrollWheel");
+
+        if(scroll > 0) {
+            if (CurrentID == 0) {
+                CurrentID = 5;
+            } else {
+                CurrentID--;
+            }
+        } else if (scroll < 0) {
+            if (CurrentID == 5) {
+                CurrentID = 0;
+            } else {
+                CurrentID++;
+            }
+        }
+
+        // DE-HIGHLIGHT NEARBY TILES
+            foreach (Tile t in nearbyTiles) {
             t.Highlight(false);
         }
 
@@ -132,7 +149,6 @@ public class Player : MonoBehaviour {
     public void RemoveCurrentItem() {
         inventory[CurrentID] = null;
         CurrentID = CurrentID;
-        GameController.UpdateInventoryUI(inventory);
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
@@ -203,7 +219,6 @@ public class Player : MonoBehaviour {
                 inventory[i] = item;
                 CurrentID = CurrentID;
                 Debug.Log("Player picked up a " + item + "!");
-                GameController.UpdateInventoryUI(inventory);
                 // DO OTHER STUFF RELATED TO PICKING UP AN ITEM
                 return;
             }
