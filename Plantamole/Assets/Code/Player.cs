@@ -42,7 +42,6 @@ public class Player : MonoBehaviour {
 
     void Start () {
         rd = GetComponent<Rigidbody2D>();
-        transform.position = GameController.GetTruePos(transform.position);
         CurrentID = 0;
 
         foreach (Tile t in GameController.tiles) {
@@ -52,13 +51,14 @@ public class Player : MonoBehaviour {
 	
 	void Update () {
 
+        transform.position = GameController.GetTruePos(transform.position);
+
         // MOVEMENT
         Vector2 movement = new Vector2(0f,0f);
 
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) {
             movement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
             rd.AddForce(Vector2.ClampMagnitude((movement * speed * Time.deltaTime), 5f));
-            transform.position = GameController.GetTruePos(transform.position);
             feet.GetComponent<Animator>().SetBool("walking", true);
         } else {
             feet.GetComponent<Animator>().SetBool("walking", false);
@@ -111,19 +111,12 @@ public class Player : MonoBehaviour {
         }
 
         // HIGHLIGHTING CLOSEST GROUND OBJECT
-        foreach (GameObject go in GameController.groundObjects) {
-            if (go != null) {
-                if (go.GetComponent<HighlightableObject>()) {
-                    go.GetComponent<HighlightableObject>().Highlight(false);
-                }
-            }
-        }
 
         GameObject highlightedObject = GameController.ClosestGroundObjectInRange(transform.position, (Vector2)Camera.main.ScreenToWorldPoint(mousePos), 1.2f);
         if (highlightedObject != null) {
-            if (highlightedObject.GetComponent<HighlightableObject>()) {
-                highlightedObject.GetComponent<HighlightableObject>().Highlight(true);
-            }
+            GameController.ShowHighlightText(highlightedObject.GetComponent<Highlightable>().text, highlightedObject.transform.position);
+        } else {
+            GameController.HideHighlightText();
         }
 
         // INTERACT WITH E
@@ -192,8 +185,8 @@ public class Player : MonoBehaviour {
             feet.transform.localPosition = new Vector3(0f, 0.1f, 0.3f);
         } else {
             face.SetActive(true);
-            hands.transform.localPosition = new Vector3(0f, 0f, -0.4f);
-            feet.transform.localPosition = new Vector3(0f, 0f, -0.3f);
+            hands.transform.localPosition = new Vector3(0f, 0f, -0.0002f);
+            feet.transform.localPosition = new Vector3(0f, 0f, -0.0001f);
         }
 
         // Looking down

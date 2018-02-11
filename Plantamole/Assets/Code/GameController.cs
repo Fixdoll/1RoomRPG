@@ -23,6 +23,7 @@ public class GameController : MonoBehaviour {
 
     public static List<GameObject> groundObjects = new List<GameObject>();
     public static GameObject[] objects;
+    public GameObject carrotObject;
     public GameObject carrotSeed;
     public GameObject stone;
 
@@ -44,6 +45,9 @@ public class GameController : MonoBehaviour {
     public Sprite inactiveInventoryFrame;
     public static Sprite inactiveFrame;
 
+    public Text highlightText;
+    public static Text hlText;
+
     private void Start() {
         game = this.transform;
         for (int b=0; b < 95; b++) {
@@ -54,7 +58,7 @@ public class GameController : MonoBehaviour {
         }
         plants = new GameObject[] { carrot, potato, onion, beetroot, ginger };
         creatures = new GameObject[] { worm, spider };
-        objects = new GameObject[] { carrotSeed, stone };
+        objects = new GameObject[] { carrotObject, carrotSeed, stone };
 
         for (int k=0; k < inventoryIcons.Length; k++) {
             invIcons[k] = inventoryIcons[k];
@@ -65,6 +69,17 @@ public class GameController : MonoBehaviour {
         }
         activeFrame = activeInventoryFrame;
         inactiveFrame = inactiveInventoryFrame;
+        hlText = highlightText;
+    }
+
+    public static void ShowHighlightText(string text, Vector2 pos) {
+        hlText.transform.position = Camera.main.WorldToScreenPoint(pos) + new Vector3(0f, 30f, 0f);
+        hlText.text = text;
+        hlText.gameObject.SetActive(true);
+    }
+
+    public static void HideHighlightText() {
+        hlText.gameObject.SetActive(false);
     }
 
     public static Vector3 GetTruePos (Vector3 pos) {
@@ -211,7 +226,7 @@ public class GameController : MonoBehaviour {
         invFrames[currentID].sprite = activeFrame;
     }
 
-    public static void SpawnHarvestSeed(Plant harvestedPlant) {
+    public static void SpawnHarvestProduct(Plant harvestedPlant) {
         GameObject seed = objects[0];
         switch (harvestedPlant.type) {
             case PlantType.Carrot:

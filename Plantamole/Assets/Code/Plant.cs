@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PlantType {Unidentified = -1, Carrot, Potato, Onion, Beetroot, Ginger }
+public enum PlantType {Unidentified = -1, Carrot, Potato, Onion, Beetroot, Ginger, Peanut }
 
 public class Plant : MonoBehaviour {
 
@@ -67,7 +67,7 @@ public class Plant : MonoBehaviour {
     }
 
     public void Harvest() {
-        GameController.SpawnHarvestSeed(this);
+        GameController.SpawnHarvestProduct(this);
         // spawn particles
         // play sound
         Destroy(gameObject);
