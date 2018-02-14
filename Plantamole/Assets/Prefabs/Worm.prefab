@@ -320,6 +320,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   start: {fileID: 0}
+  health: 100
+  healthMax: 100
 --- !u!212 &212633296736244686
 SpriteRenderer:
   m_ObjectHideFlags: 1

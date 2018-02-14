@@ -27,13 +27,16 @@ public class GameController : MonoBehaviour {
     public GameObject carrotSeed;
     public GameObject stone;
 
+    public static GameObject[] bullets;
+    public GameObject carrotBullet;
+
     public static Transform game;
 
     public Transform entrancesParent;
     public static List<Transform> entrances = new List<Transform>();
 
-    int mapHeight = 9;
-    int mapWidth = 11;
+    //int mapHeight = 9;
+    //int mapWidth = 11;
 
     public Image[] inventoryIcons;
     public static Image[] invIcons = new Image[6];
@@ -59,6 +62,7 @@ public class GameController : MonoBehaviour {
         plants = new GameObject[] { carrot, potato, onion, beetroot, ginger };
         creatures = new GameObject[] { worm, spider };
         objects = new GameObject[] { carrotObject, carrotSeed, stone };
+        bullets = new GameObject[] { carrotBullet };
 
         for (int k=0; k < inventoryIcons.Length; k++) {
             invIcons[k] = inventoryIcons[k];
@@ -147,7 +151,8 @@ public class GameController : MonoBehaviour {
 
     public static void Plant(PlantType type, Tile t) {
         if (t.content == null) {
-            GameObject spawnedPlant = Instantiate(plants[(int)type], GetTruePos(t.transform.position), Quaternion.identity, game);
+            GameObject spawnedPlant = Instantiate(plants[(int)type], GetTruePos(t.transform.position + new Vector3(0f, 0.2f, 0f)), Quaternion.identity, game);
+            Instantiate(Resources.Load("PlantSound"), t.transform.position, Quaternion.identity, GameController.game);
             spawnedPlants.Add(spawnedPlant.GetComponent<Plant>());
             t.content = spawnedPlant;
         }
@@ -182,6 +187,10 @@ public class GameController : MonoBehaviour {
     }
 
     public static void AddGroundObject(GameObject go) {
+        IGroundObject igo = go.GetComponent<IGroundObject>();
+        if (igo != null) {
+            igo.CreateObject();
+        }
         groundObjects.Add(go);
     }
 
@@ -227,13 +236,17 @@ public class GameController : MonoBehaviour {
     }
 
     public static void SpawnHarvestProduct(Plant harvestedPlant) {
-        GameObject seed = objects[0];
+        GameObject product = objects[0];
         switch (harvestedPlant.type) {
             case PlantType.Carrot:
-                seed = objects[0];
+                product = objects[0];
                 break;
         }
-        AddGroundObject(Instantiate(seed, harvestedPlant.transform.position, Quaternion.identity, game));
+        GameObject newProduct = Instantiate(product,
+                                            harvestedPlant.transform.position,
+                                            Quaternion.identity,
+                                            game);
+        AddGroundObject(newProduct);
     }
 
     // USE THIS TO GET VECTOR2 DISTANCES

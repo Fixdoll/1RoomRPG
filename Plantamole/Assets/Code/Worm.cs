@@ -16,6 +16,8 @@ public class Worm : Creature {
         targetPos = start.transform.position;
         StartCoroutine(GoToTarget(targetPos));
         movingToTarget = true;
+        loot.Add(1);
+        loot.Add(2);
     }
 
     void Update() {
@@ -27,7 +29,7 @@ public class Worm : Creature {
 
         if (movingToTarget) {
             if (GameController.ManhattanDistance((Vector2)transform.position, targetPos) < 0.2f) {
-                Debug.Log("Worm reached target.");
+                //Debug.Log("Worm reached target.");
                 rd.velocity = new Vector2(0, 0);
                 StopAllCoroutines();
                 // GIVE ANOTHER TARGET

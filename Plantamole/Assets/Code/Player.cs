@@ -15,6 +15,11 @@ public class Player : MonoBehaviour {
     public GameObject nose;
     public GameObject cheek;
 
+    public Transform weaponHands;
+    public GameObject carryHands;
+
+    int dirAngle;
+
     Item[] inventory = new Item[6];
     Item currentItem;
     int _currentID = 0;
@@ -30,15 +35,16 @@ public class Player : MonoBehaviour {
     }
     public Image[] inventoryIcons;
 
-    // TEMP PUBLIC ICON
-    public Sprite carrotSeedIcon;
-
     Rigidbody2D rd;
-    int lookDir = 0;
+    //int lookDir = 0;
 
     List<Tile> nearbyTiles = new List<Tile>();
     List<Tile> nearbyEmptyTiles = new List<Tile>();
     Tile highlightedTile;
+
+    public enum CharStances { Empty, Weapon, Carry }
+
+    public SpriteRenderer carriedItem;
 
     void Start () {
         rd = GetComponent<Rigidbody2D>();
@@ -64,15 +70,10 @@ public class Player : MonoBehaviour {
             feet.GetComponent<Animator>().SetBool("walking", false);
         }
 
-        // TEMP PICKUP CARROT SEED WITH SPACE
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            Pickup(new Seed(PlantType.Carrot, carrotSeedIcon));
-        }
-
         // FACING
         Vector2 mousePos = Input.mousePosition;
         Vector2 playerPos = Camera.main.WorldToScreenPoint(transform.position);
-        int dirAngle = Mathf.FloorToInt(Vector2.SignedAngle(playerPos - mousePos, playerPos - (playerPos + Vector2.up)));
+        dirAngle = Mathf.FloorToInt(Vector2.SignedAngle(playerPos - mousePos, playerPos - (playerPos + Vector2.up)));
 
         if (dirAngle < -30 && dirAngle >= -90) {
             UpdateFace(0);
@@ -125,8 +126,17 @@ public class Player : MonoBehaviour {
                 if (highlightedObject.GetComponent<Plant>()) {
                     highlightedObject.GetComponent<Plant>().Harvest();
                 } else if (highlightedObject.GetComponent<SeedObject>()) {
-                    Pickup(new Seed(highlightedObject.GetComponent<SeedObject>().t, highlightedObject.GetComponent<SeedObject>().inventoryIcon));
-                    Destroy(highlightedObject.gameObject);
+                    if (Pickup(highlightedObject.GetComponent<SeedObject>().seed)) {
+                        Destroy(highlightedObject.gameObject);
+                    }
+                } else if (highlightedObject.GetComponent<WeaponObject>()) {
+                    if (Pickup(highlightedObject.GetComponent<WeaponObject>().weapon)) {
+                        Destroy(highlightedObject.gameObject);
+                    }
+                } else if (highlightedObject.GetComponent<OtherObject>()) {
+                    if (Pickup(highlightedObject.GetComponent<OtherObject>().other)) {
+                        Destroy(highlightedObject.gameObject);
+                    }
                 }
             }
         }
@@ -134,22 +144,76 @@ public class Player : MonoBehaviour {
         // MODES
         if (currentItem == null) {
             // carrying nothing
+            ChangeStance(CharStances.Empty);
 
         } else if (currentItem is Seed) {
             // carrying seed
+            carriedItem.sprite = currentItem.inventoryIcon;
+            ChangeStance(CharStances.Carry);
             highlightedTile = GameController.ClosestTile((Vector2)Camera.main.ScreenToWorldPoint(mousePos), nearbyEmptyTiles);
             if (highlightedTile != null) {
                 highlightedTile.Highlight(true);
                 // plant on left mouse click
                 if (Input.GetButtonDown("Fire1")) {
-                    GameController.Plant((currentItem as Seed).t, highlightedTile);
+                    GameController.Plant((currentItem as Seed).type, highlightedTile);
                     RemoveCurrentItem();
                     nearbyEmptyTiles.Remove(highlightedTile);
                     highlightedTile.Highlight(false);
                 }
             }
-        } else {
+        } else if (currentItem is Weapon) {
+            // carrying weapon
+            ChangeStance(CharStances.Weapon);
 
+            for(int u=0; u < weaponHands.childCount; u++) {
+                weaponHands.GetChild(u).gameObject.SetActive(false);
+            }
+
+            WeaponType currentWeaponType = (currentItem as Weapon).type;
+
+            switch (currentWeaponType) {
+                case WeaponType.Carrot:
+                    weaponHands.GetChild(0).gameObject.SetActive(true);
+                    break;
+            }
+
+            if (Input.GetButtonDown("Fire1")) {
+                Fire(currentWeaponType);
+            }
+        } else if (currentItem is Other) {
+            // carrying other objects
+            carriedItem.sprite = currentItem.inventoryIcon;
+            ChangeStance(CharStances.Carry);
+        }
+    }
+
+    public void Fire (WeaponType t) {
+        switch (t) {
+            case WeaponType.Carrot:
+                Instantiate(Resources.Load("CarrotFireSound"), transform.position, Quaternion.identity, GameController.game);
+                GameObject bullet = Instantiate(GameController.bullets[0], weaponHands.position + (Input.mousePosition - Camera.main.WorldToScreenPoint(weaponHands.position)).normalized * 0.5f, Quaternion.Euler(0,0,-dirAngle+90), GameController.game);
+                Physics2D.IgnoreCollision(bullet.GetComponentInChildren<Collider2D>(), GetComponent<Collider2D>());
+                bullet.GetComponent<Rigidbody2D>().AddForce((Vector2)bullet.transform.right * 0.2f, ForceMode2D.Impulse);
+                break;
+        }
+    }
+
+    public void ChangeStance(CharStances to) {
+
+        hands.SetActive(false);
+        carryHands.SetActive(false);
+        weaponHands.gameObject.SetActive(false);
+
+        switch (to) {
+            case CharStances.Empty:
+                hands.SetActive(true);
+                break;
+            case CharStances.Weapon:
+                weaponHands.gameObject.SetActive(true);
+                break;
+            case CharStances.Carry:
+                carryHands.SetActive(true);
+                break;
         }
     }
 
@@ -178,15 +242,24 @@ public class Player : MonoBehaviour {
     }
 
     void UpdateFace(int lookDir) {
+
+        Vector2 mousePos = Input.mousePosition;
+        Vector2 playerPos = Camera.main.WorldToScreenPoint(transform.position);
+        int weaponDir = -Mathf.FloorToInt(Vector2.SignedAngle(playerPos - mousePos, playerPos - (playerPos + Vector2.up))) - 90;
+
         // Looking up
         if (lookDir < 3) {
             face.SetActive(false);
             hands.transform.localPosition = new Vector3(0f, 0.1f, 0.4f);
+            weaponHands.transform.localPosition = new Vector3(0f, 0.05f, 0.4f);
+            carryHands.transform.localPosition = new Vector3(0f, 0.1f, 0.4f);
             feet.transform.localPosition = new Vector3(0f, 0.1f, 0.3f);
         } else {
             face.SetActive(true);
-            hands.transform.localPosition = new Vector3(0f, 0f, -0.0002f);
-            feet.transform.localPosition = new Vector3(0f, 0f, -0.0001f);
+            hands.transform.localPosition = new Vector3(0f, 0f, -0.004f);
+            weaponHands.transform.localPosition = new Vector3(0f, -0.05f, -0.004f);
+            carryHands.transform.localPosition = new Vector3(0f, 0f, -0.004f);
+            feet.transform.localPosition = new Vector3(0f, 0f, -0.003f);
         }
 
         // Looking down
@@ -214,26 +287,29 @@ public class Player : MonoBehaviour {
         // Looking right
         if (lookDir == 2 || lookDir == 3) {
             transform.localScale = new Vector3(-1f, 1f, 1f);
+            weaponHands.eulerAngles = new Vector3(0f, 0f, weaponDir + 180);
         } else {
             transform.localScale = new Vector3(1f, 1f, 1f);
+            weaponHands.eulerAngles = new Vector3(0f, 0f, weaponDir);
         }
     }
 
-    void Pickup(Item item) {
+    bool Pickup(Item item) {
 
         for (int i = 0; i < inventory.Length; i++) {
             if (inventory[CurrentID] == null) {
                 inventory[CurrentID] = item;
                 CurrentID = CurrentID;
                 // DO OTHER STUFF RELATED TO PICKING UP AN ITEM
-                return;
+                return true;
             } else if (inventory[i] == null) {
                 inventory[i] = item;
                 CurrentID = CurrentID;
                 // DO OTHER STUFF RELATED TO PICKING UP AN ITEM
-                return;
+                return true;
             }
         }
+        return false;
         // DO STUFF RELATED TO TRYING TO PICKUP WITH FULL INVENTORY
     }
 }

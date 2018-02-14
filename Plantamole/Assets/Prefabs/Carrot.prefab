@@ -71,12 +71,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 186c27c9145cd034188f62696797fd7c, type: 3}
   - {fileID: 21300000, guid: 6931fa95cd43b294e8b4efbb39c27d03, type: 3}
   - {fileID: 21300000, guid: 54a6f375dc5b7274280cd6291e8ab1c6, type: 3}
-  growthSpeed: 1
-  lightBoost: 3
-  waterBoost: 2
+  growthSpeed: 2
   startHealth: 50
-  lighted: 0
-  watered: 0
 --- !u!212 &212444477426054498
 SpriteRenderer:
   m_ObjectHideFlags: 1

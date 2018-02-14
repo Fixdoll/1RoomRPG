@@ -1,13 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Seed : Item {
 
-    public PlantType t;
+    public PlantType type;
 
     public Seed(PlantType type, Sprite icon) {
-        t = type;
+        this.type = type;
         inventoryIcon = icon;
     }
 }

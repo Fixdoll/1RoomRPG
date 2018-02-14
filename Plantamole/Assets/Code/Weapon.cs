@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum WeaponType { Unidentified = -1, Carrot }
+public class Weapon : Item {
 
-public class Weapon {
+    public WeaponType type;
+    public int bullets;
 
-    public WeaponType t = WeaponType.Unidentified;
-    // OTHER PROPERTIES
+    public Weapon(WeaponType type, Sprite icon, int bullets) {
+        this.type = type;
+        inventoryIcon = icon;
+        this.bullets = bullets;
+    }
 }

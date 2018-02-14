@@ -1,12 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public enum CreatureType { Unidentified = -1, Worm, Spider }
 
 public class Creature : MonoBehaviour {
 
     public Tile start;
+    public int health;
+    public int healthMax;
+    public List<int> loot; // refers to GameController.objects index
+    public int lootAmount = 2;
 
     public List<Tile> FindPath(Tile target) {
         List<Tile> path = new List<Tile>();
@@ -46,5 +51,29 @@ public class Creature : MonoBehaviour {
         pathToAdd.Add(tilesToTry[shortestDistID]);
         PathStep(tilesToTry[shortestDistID], target, pathToAdd);
         return true;
+    }
+
+    public void GetDamage(int dmg) {
+        health = Mathf.Clamp(health-dmg, 0, healthMax);
+        
+        if (health == 0) {
+            Die();
+        }
+        Color initial = GetComponentInChildren<SpriteRenderer>().color;
+        GetComponentInChildren<SpriteRenderer>().DOColor(Color.red, 0.05f).OnComplete(() => GetComponentInChildren<SpriteRenderer>().DOColor(initial, 0.05f));
+    }
+
+    public void Die() {
+        for (int k=0; k < lootAmount; k++) {
+            GameObject l00t = Instantiate(GameController.objects[loot[Random.Range(0, loot.Count)]],
+                                (Vector2)transform.position,
+                                Quaternion.identity,
+                                GameController.game);
+            GameController.AddGroundObject(l00t);
+            if (l00t.GetComponent<Rigidbody2D>()) {
+                l00t.GetComponent<Rigidbody2D>().AddForce((Vector2)transform.position + new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized * 10f);
+            }
+        }
+        Destroy(gameObject);
     }
 }

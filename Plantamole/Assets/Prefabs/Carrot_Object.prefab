@@ -144,6 +144,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   t: 0
   inventoryIcon: {fileID: 21300000, guid: dacbf669e351df94bb494666ae25ccf6, type: 3}
+  bullets: 20
 --- !u!212 &212438793047697390
 SpriteRenderer:
   m_ObjectHideFlags: 1
